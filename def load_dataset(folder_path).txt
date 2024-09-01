@@ -1,0 +1,28 @@
+def load_dataset(folder_path):
+    feature_list = []
+    filenames = [] 
+    labels=[]
+
+    
+    for image_file in os.listdir(folder_path):
+        image_path = os.path.join(folder_path, image_file)
+        features = extract_lbp_features(image_path)
+        feature_list.append(features)
+        filenames.append(image_file)
+        
+    # label 1 for live images, 0 for spoof images
+    class_identifier=1
+    if 'Spoof' in folder_path:
+        class_identifier=0
+
+    labels.append(class_identifier)
+    
+    return np.array(feature_list), filenames,labels
+
+
+
+#Extract feature for both live and spoof dataset 
+X_live_train, filenames_live_train, y_live_train = load_dataset(live_train_path, labels=1)
+X_spoof_train, filenames_spoof_train, y_spoof_train = load_dataset(spoof_train_path,labels=0)
+X_live_test, filenames_live_test, y_live_test = load_dataset(live_test_path,labels=1)
+X_spoof_test, filenames_spoof_test, y_spoof_test = load_dataset(spoof_test_path,labels=0)
